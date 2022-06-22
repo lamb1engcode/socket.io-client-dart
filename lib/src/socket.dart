@@ -137,8 +137,7 @@ class Socket extends EventEmitter {
   ///
   /// @return {Socket} self
   /// @api public
-  void emitWithAck(String event, dynamic data,
-      {Function? ack, bool binary = false}) {
+  void emitWithAck(String event, dynamic data, {Function? ack, bool binary = false}) {
     if (EVENTS.contains(event)) {
       super.emit(event, data);
     } else {
@@ -167,11 +166,9 @@ class Socket extends EventEmitter {
           io.engine!.transport != null &&
           io.engine!.transport!.writable == true;
 
-      final discardPacket =
-          flags['volatile'] != null && (!isTransportWritable || !connected);
+      final discardPacket = flags['volatile'] != null && (!isTransportWritable || !connected);
       if (discardPacket) {
-        _logger
-            .fine('discard packet as the transport is not currently writable');
+        _logger.fine('discard packet as the transport is not currently writable');
       } else if (connected) {
         this.packet(packet);
       } else {
@@ -338,16 +335,16 @@ class Socket extends EventEmitter {
   /// @param {Object} packet
   /// @api private
   void onack(Map packet) {
-    var ack = acks.remove('${packet['id']}');
+    var ack = this.acks.remove(packet['id']);
     if (ack is Function) {
       _logger.fine('''calling ack ${packet['id']} with ${packet['data']}''');
+      Function.apply(ack, packet['data']);
 
-      var args = packet['data'] as List;
-      if (args.length > 1) {
-        // Fix for #42 with nodejs server
-        Function.apply(ack, [args]);
+      // Fix for #42
+      if (packet['data'] is List) {
+        Function.apply(ack, [packet['data']]);
       } else {
-        Function.apply(ack, args);
+        Function.apply(ack, packet['data']);
       }
     } else {
       _logger.fine('''bad ack ${packet['id']}''');

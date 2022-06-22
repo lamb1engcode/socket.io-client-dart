@@ -84,10 +84,8 @@ class Manager extends EventEmitter {
     reconnectionDelay = options['reconnectionDelay'] ?? 1000;
     reconnectionDelayMax = options['reconnectionDelayMax'] ?? 5000;
     randomizationFactor = options['randomizationFactor'] ?? 0.5;
-    backoff = _Backoff(
-        min: reconnectionDelay,
-        max: reconnectionDelayMax,
-        jitter: randomizationFactor);
+    backoff =
+        _Backoff(min: reconnectionDelay, max: reconnectionDelayMax, jitter: randomizationFactor);
     timeout = options['timeout'] ?? 20000;
     this.uri = uri;
     autoConnect = options['autoConnect'] != false;
@@ -134,8 +132,7 @@ class Manager extends EventEmitter {
   /// @return {Manager} self
   /// @api public
   ///
-  Manager open({callback, Map? opts}) =>
-      connect(callback: callback, opts: opts);
+  Manager open({callback, Map? opts}) => connect(callback: callback, opts: opts);
 
   Manager connect({callback, Map? opts}) {
     _logger.fine('readyState $readyState');
@@ -172,8 +169,7 @@ class Manager extends EventEmitter {
       _logger.fine('connect attempt will timeout after $timeout');
 
       if (timeout == 0) {
-        openSubDestroy
-            .destroy(); // prevents a race condition with the 'open' event
+        openSubDestroy.destroy(); // prevents a race condition with the 'open' event
       }
       // set timer
       var timer = Timer(Duration(milliseconds: timeout!.toInt()), () {
@@ -198,6 +194,7 @@ class Manager extends EventEmitter {
   /// @api private
   ///
   void onopen([_]) {
+    print('OPENNN');
     _logger.fine('open');
 
     // clear old subs
@@ -241,6 +238,7 @@ class Manager extends EventEmitter {
   /// @api private
   ///
   void ondata(data) {
+    print('ONDATA: $data');
     decoder.add(data);
   }
 
