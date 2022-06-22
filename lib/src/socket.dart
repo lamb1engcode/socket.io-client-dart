@@ -137,7 +137,8 @@ class Socket extends EventEmitter {
   ///
   /// @return {Socket} self
   /// @api public
-  void emitWithAck(String event, dynamic data, {Function? ack, bool binary = false}) {
+  void emitWithAck(String event, dynamic data,
+      {Function? ack, bool binary = false}) {
     if (EVENTS.contains(event)) {
       super.emit(event, data);
     } else {
@@ -166,9 +167,11 @@ class Socket extends EventEmitter {
           io.engine!.transport != null &&
           io.engine!.transport!.writable == true;
 
-      final discardPacket = flags['volatile'] != null && (!isTransportWritable || !connected);
+      final discardPacket =
+          flags['volatile'] != null && (!isTransportWritable || !connected);
       if (discardPacket) {
-        _logger.fine('discard packet as the transport is not currently writable');
+        _logger
+            .fine('discard packet as the transport is not currently writable');
       } else if (connected) {
         this.packet(packet);
       } else {
@@ -299,11 +302,10 @@ class Socket extends EventEmitter {
 
     // dart doesn't support "String... rest" syntax.
     if (connected == true) {
-      print(args);
       if (args.length > 2) {
         Function.apply(super.emit, [args.first, args.sublist(1)]);
       } else {
-        Function.apply(super.emit, [args]);
+        Function.apply(super.emit, args);
       }
     } else {
       receiveBuffer.add(args);
