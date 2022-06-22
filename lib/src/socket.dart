@@ -106,6 +106,8 @@ class Socket extends EventEmitter {
     if (!io.reconnecting) {
       io.open(); // ensure open
     }
+
+    print('open' == io.readyState);
     if ('open' == io.readyState) onopen();
     return this;
   }
@@ -168,16 +170,11 @@ class Socket extends EventEmitter {
 
       final discardPacket = flags['volatile'] != null && (!isTransportWritable || !connected);
 
-      print("IS DISCARD: ${discardPacket.toString()}");
-
       if (discardPacket) {
-        print('1');
         _logger.fine('discard packet as the transport is not currently writable');
       } else if (connected) {
-        print('2');
         this.packet(packet);
       } else {
-        print('3');
         sendBuffer.add(packet);
       }
       flags = {};
@@ -295,7 +292,6 @@ class Socket extends EventEmitter {
   /// @param {Object} packet
   /// @api private
   void onevent(Map packet) {
-    print("ONEVENT: ${packet.toString()}");
     List args = packet['data'] ?? [];
 //    debug('emitting event %j', args);
 
