@@ -101,12 +101,14 @@ class Socket extends EventEmitter {
   Socket open() => connect();
 
   Socket connect() {
+    print('CONNECT: $connected');
     if (connected) return this;
     subEvents();
     if (!io.reconnecting) {
       io.open(); // ensure open
     }
 
+    print('OPENNNNNNN THIS');
     print('open' == io.readyState);
     if ('open' == io.readyState) onopen();
     return this;
