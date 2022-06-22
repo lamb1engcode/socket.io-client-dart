@@ -156,6 +156,9 @@ class Socket extends EventEmitter {
         'options': {'compress': flags.isNotEmpty == true && flags['compress']}
       };
 
+      print('PACKET: ${packet.toString()}');
+
+      print('ACK IS NULL: ${(ack == null).toString()}');
       // event ack callback
       if (ack != null) {
         _logger.fine('emitting packet with ack id $ids');
@@ -289,6 +292,7 @@ class Socket extends EventEmitter {
   /// @param {Object} packet
   /// @api private
   void onevent(Map packet) {
+    print("ONEVENT: ${packet.toString()}");
     List args = packet['data'] ?? [];
 //    debug('emitting event %j', args);
 
