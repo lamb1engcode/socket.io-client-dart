@@ -194,7 +194,6 @@ class Manager extends EventEmitter {
   /// @api private
   ///
   void onopen([_]) {
-    print('OPENNN');
     _logger.fine('open');
 
     // clear old subs
@@ -238,7 +237,6 @@ class Manager extends EventEmitter {
   /// @api private
   ///
   void ondata(data) {
-    print('ONDATA: $data');
     decoder.add(data);
   }
 

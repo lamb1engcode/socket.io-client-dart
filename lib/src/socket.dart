@@ -156,9 +156,6 @@ class Socket extends EventEmitter {
         'options': {'compress': flags.isNotEmpty == true && flags['compress']}
       };
 
-      print('PACKET: ${packet.toString()}');
-
-      print('ACK IS NULL: ${(ack == null).toString()}');
       // event ack callback
       if (ack != null) {
         _logger.fine('emitting packet with ack id $ids');
@@ -170,11 +167,17 @@ class Socket extends EventEmitter {
           io.engine!.transport!.writable == true;
 
       final discardPacket = flags['volatile'] != null && (!isTransportWritable || !connected);
+
+      print("IS DISCARD: ${discardPacket.toString()}");
+
       if (discardPacket) {
+        print('1');
         _logger.fine('discard packet as the transport is not currently writable');
       } else if (connected) {
+        print('2');
         this.packet(packet);
       } else {
+        print('3');
         sendBuffer.add(packet);
       }
       flags = {};
